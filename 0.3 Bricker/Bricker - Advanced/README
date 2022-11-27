@@ -1,0 +1,128 @@
+talazulay
+316010636
+
+File description and comments:
+
+./src/BrickerGameManager.java -  Extends GameManager class of DanoGameLab. The main class of the game in
+ which all the objects needed for the game are initialized and the game is managed in real time.
+
+-------------------------------------------------------------------------------------------------------------
+
+./src.brick_strategies - A package that contains all the strategies that can occur when
+ an object hits a brick.
+
+./src.brick_strategies/CollisionStrategy.java - Interface for a strategy for collision of a brick,
+ requires the implementation of the 2 methods, one that defines what happens at the time of collision,
+  and the other that returns the gameObjectsCollection for removal / addition of other objects.
+
+./src.brick_strategies/RemoveBrickStrategy.java - The basic strategy of collision of brick in which
+ the brick is removed from the game, this strategy will be expanded using the RemoveBrickStrategyDecorator
+
+./src.brick_strategies/RemoveBrickStrategyDecorator.java - A decorator who adds to the basic strategy
+ another feature that will occur when collision is occur with the help of instances of objects
+ that implements the CollisionStrategy Interface
+
+./src.brick_strategies/AddPaddleStrategy.java - A strategy that extends RemoveBrickStrategyDecorator
+ and adds another Paddle to the game
+
+./src.brick_strategies/ChangeCameraStrategy.java -  A strategy that extends RemoveBrickStrategyDecorator
+ and changes the focus of the camera to track the main ball.
+
+./src.brick_strategies/PuckStrategy.java - A strategy that extends RemoveBrickStrategyDecorator
+and add 3 pucks to the game (gray balls)
+
+./src.brick_strategies/WideOrNarrowPaddleStrategy.java - A strategy that extends RemoveBrickStrategyDecorator
+ and adds an object which can expand or narrow the paddle
+
+./src.brick_strategies/DoubleStrategy.java - A strategy that implements the collisionStrategy interface
+ And operates 2 other strategies which it holds
+
+ ./src.brick_strategies/BrickStrategyFactory.java - A factory that randomly creates one of the
+   ColllsionStrategy objects and returns them
+
+The choice of implementation with the help of a decorator allows to use the basic strategy of removal
+the brick (which always occurs) and in addition to it add another strategy (s).
+All strategies are similar in their mode of action and therefore implement the same interface
+which requires the implementation of the occurrence at the time of collision.
+The factory we defined allows to create strategies in one place and put all the code of choosing random
+strategy in the same class.
+
+--------------------------------------------------------------------------------------------------------------
+./src.gameobjects - A package that contains all the objects in the game.
+
+./src.gameobjects/Ball.java - Extends GameObject class of DanoGameLab. The class implements a ball instance
+ in the game and overrides the method which determines what will happen to the ball when it hits another
+ object in the game.
+
+ ./src.gameobjects/BallCollisionCountdownAgent.java - Extends GameObject class of DanoGameLab,
+
+./src.gameobjects/Brick.java - Extends GameObject class of DanoGameLab. The class implements a brick instance
+ in the game and overrides the method which determines what happens to the ball when an object hits it
+ according to the CollisionStrategy that belongs to it.
+
+./src.gameobjects/GraphicLifeCounter.java - Extends GameObject class of DanoGameLab. The class helps
+ to implement the camera tracking feature, the class counts the number of hits of the ball and calls
+ to the ChangeCameraStrategy when the camera has to return to normal
+
+./src.gameobjects/NumericLifeCounter.java - Extends GameObject class of DanoGameLab. The class
+ prints to the screen a string with the number of disqualifications left for the player at any one time
+
+./src.gameobjects/Paddle.java - Extends GameObject class of DanoGameLab. The class implements a paddle instance
+ in the game and overrides the update method which moves the paddle according to the keys on which the player
+ presses.
+
+ ./src.gameobjects/MockPaddle.java - Extends Paddle class. the class implements a Mockpaddle instance
+  in the game and overrides the onCollisionEnter method which removes the paddle after it has reached
+  a number of collisions with other objects
+
+  ./src.gameobjects/Puck.java - Extends Ball class. The Puck has no additional features in the implementation
+    but we implemented it in a new class to differentiate between the Pucks and the main ball in the game
+
+  ./src.gameobjects/StatusDefiner.java - Extends GameObject class of DanoGameLab. The class implements
+   a General statusDfiner which specific statusDefiners setters will extend it. The class overrides the
+   shouldCollideWith method to ensure that the status definer can collide only with a paddle.
+
+  ./src.gameobjects/WidenOrNarrowPaddle.java - Extends statusDefiner. the class implements a status definer
+    Which can expand or narrow the paddle.
+
+
+ While designing GraphicLifeCounter and NumericLifeCounter I decided to add them as objects that are not
+ visible (Renderable = null) and only work behind the scenes. This decision allowed me to override the update
+ methods and implement within the classes the real-time update of the remaining life presentation.
+
+ The definition of a statusDefiner class will allow us to add to the game many more status definers objects
+ that have a lot of features in common and therefore need to extend the same class.
+
+ The definition of the static variable isInstantiated in the MockPaddle class allows us to know at each
+ stage of the game whether there is currently a Mockpaddle object in the game, thus allows us to to ensure
+ that there are no two Mockpaddle objects in the game at the same time.
+
+-------------------------------------------------------------------------------------------------------------
+
+Algorithms:
+
+1. alotStudyTime - The greedy algorithm first sorts the time windows and tasks in ascending order,
+ then inserts the tasks into the time windows for as long as it can. This greedy method ensures that the
+ resulting solution is legal and optimal.
+ In addition, the tasks and time slots are sorted in running time of O(nlogn + mlogm),
+  and then we pass over the tasks and time slots in running time of O(n+m), and in total we get that
+  the running time will be O(nlogn + mlogm).
+
+2. minLeap - The greedy algorithm each time choose from all the  possible leaves to jump to the leaf from
+ which it is possible to reach the farthest. In this way the algorithm will find the lowest number of jumps
+ needed to get from the first leaf to the last leaf. During the algorithm we run through the array once
+ and perform a number operations at a fixed time O(1) so the run time of ths algorithm will be O(n)
+
+ 3. bucketWalk - At each stage k the child is presented with 2 options:
+    - Fill 2 buckets and then act as in step K-2
+    - Fill one bucket and then act as in step k-1
+    Therefore the number of possibilities for K-litters will be the sum of the number of possibilities
+    for k-1 litters and the number of  possibilities for k-2 litters. We get here a sum of Fibonacci series
+    which each time is calculated the value of K using the values k-1 and K-2. Of course an algorithm that
+    calculates the Fibonacci series in this way is a dynamic algorithm and its runtime will be O(n)
+
+ 4. numTrees - The algorithm that gives the solution to the problem is a dynamic algorithm that
+  works as follows: At each stage i we calculate the sum of all the products numOfTrees[j] * numOfTrees[i-j-1]
+  when j runs from 0 to i. That is, in each step we use the values of the previous steps that have already
+  been calculated. We run on all the cells in the array and in each cell we run on j from 0 to i.
+  according to the sum of the invoice series we get that the total run time of the algorithm is O(n^2)

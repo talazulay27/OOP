@@ -1,0 +1,46 @@
+talazulay
+316010636
+
+File description:
+
+./src/BrickerGameManager.java -  Extends GameManager class of DanoGameLab. The main class of the game in
+ which all the objects needed for the game are initialized and the game is managed in real time.
+
+./src/src.brick_strategies - A package that contains all the strategies that can occur when
+ an object hits a brick.
+
+./src/src.brick_strategies/CollisionStrategy.java - A strategy that removes the brick from the game when hit
+
+./src/src.gameobjects - A package that contains all the objects in the game.
+
+./src/src.gameobjects/Ball.java - Extends GameObject class of DanoGameLab. The class implements a ball instance
+ in the game and overrides the method which determines what will happen to the ball when it hits another
+ object in the game.
+
+./src/src.gameobjects/Brick.java - Extends GameObject class of DanoGameLab. The class implements a brick instance
+ in the game and overrides the method which determines what happens to the ball when an object hits it
+  according to the CollisionStrategy that belongs to it.
+
+./src/src.gameobjects/GraphicLifeCounter.java - Extends GameObject class of DanoGameLab. The class graphically
+ displays the number of disqualifications left for the player at any one time.
+
+./src/src.gameobjects/NumericLifeCounter.java - Extends GameObject class of DanoGameLab. The class
+ prints to the screen a string with the number of disqualifications left for the player at any one time
+
+./src/src.gameobjects/Paddle.java - Extends GameObject class of DanoGameLab. he class implements a paddle instance
+ in the game and overrides the update method which moves the paddle according to the keys on which the player
+  presses.
+
+Design: GraphicLifeCounter and NumericLifeCounter
+
+While designing GraphicLifeCounter and NumericLifeCounter I decided to add them as objects that are not
+visible (Renderable = null) and only work behind the scenes. This decision allowed me to override the update
+methods and implement within the classes the real-time update of the remaining life presentation.
+
+Implementation issues: GraphicLifeCounter and NumericLifeCounter
+
+When I implemented these 2 classes I decided to create private fields within the classes which will actually
+be objects of the game (text object, and image of heart objects). these objects are private and hidden from
+the other classes and their management is done only within the classes themselves (in the update method).
+I added the instances of the 2 classes and the other objects I created to the background layer of the game
+objects collection so that other objects in the game could not hit them.
